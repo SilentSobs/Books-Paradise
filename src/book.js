@@ -5,6 +5,7 @@ import "../src/sass/style.css";
 import { motion } from "framer-motion";
 
 const Book = ({ id, volumeInfo }) => {
+  let isbn10, isbn13;
   const imageVariants = {
     hover: {
       scale: 1.7,
@@ -16,7 +17,16 @@ const Book = ({ id, volumeInfo }) => {
       },
     },
   };
-  let { title, authors, publisher, previewLink, imageLinks } = volumeInfo;
+  console.log(volumeInfo);
+  let { title, authors, publisher, previewLink, imageLinks ,industryIdentifiers} = volumeInfo;
+  for (let i = 0; i < industryIdentifiers.length; i++) {
+    let identifier = industryIdentifiers[i];
+    if (identifier.type === 'ISBN_10') {
+        isbn10 = identifier.identifier;
+    } else if (identifier.type === 'ISBN_13') {
+        isbn13 = identifier.identifier;
+    }
+  }
 
   //setting up default values for volume info data
   title = title || "Title is not available";
@@ -93,8 +103,18 @@ const Book = ({ id, volumeInfo }) => {
               <a href={previewLink} target="_blank" rel="noreferrer">
                 {" "}
                 Google Books <BiLinkExternal></BiLinkExternal>{" "}
+                
               </a>
+              <br/>
+              Buy Hard Copy From Amazon  :{" "}
+              <a href={`https://www.amazon.in/s?k=${title}${authors}` } target="_blank" rel="noreferrer">
+                {" "}
+                Amazon  Search
+                
+              </a>
+              <p>INBN:{isbn13}</p>
             </h5>
+            
           )}
         </div>
 
